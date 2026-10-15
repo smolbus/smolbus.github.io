@@ -1,0 +1,341 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Автобусы Смоленской</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#EDF1F6;
+  --surface:#FFFFFF;
+  --ink:#12202F;
+  --muted:#566879;
+  --line:#D3DBE6;
+  --hl:#FFEFC2;
+  --chip-ink:#FFFFFF;
+  --r124:#0B7F8A;
+  --r125:#7447C9;
+  --r1341:#2563D6;
+  --r1342:#C2461A;
+  --font-display:'Unbounded','Golos Text',system-ui,sans-serif;
+  --font-body:'Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D141D;
+    --surface:#151F2B;
+    --ink:#E7EDF5;
+    --muted:#92A2B5;
+    --line:#26354A;
+    --hl:#3A3012;
+    --chip-ink:#0B1118;
+    --r124:#3CC3CF;
+    --r125:#A98BF0;
+    --r1341:#6A9BFF;
+    --r1342:#FF8B57;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D141D;
+  --surface:#151F2B;
+  --ink:#E7EDF5;
+  --muted:#92A2B5;
+  --line:#26354A;
+  --hl:#3A3012;
+  --chip-ink:#0B1118;
+  --r124:#3CC3CF;
+  --r125:#A98BF0;
+  --r1341:#6A9BFF;
+  --r1342:#FF8B57;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.4;
+  padding-block:20px 36px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:1040px;margin:0 auto}
+
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:18px}
+h1{font-family:var(--font-display);font-weight:600;font-size:clamp(1.2rem,5vw,1.75rem);line-height:1.15;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.top p{margin:6px 0 0;color:var(--muted);font-size:.9rem}
+.clock{text-align:right}
+.clock small{display:block;color:var(--muted);font-size:.7rem;letter-spacing:.09em;text-transform:uppercase}
+.clock b{display:block;font-family:var(--font-display);font-weight:500;font-size:1.7rem;line-height:1.2;font-variant-numeric:tabular-nums}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:18px}
+.dir{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.dir-head h2{margin:0;font-size:1.1rem;font-weight:600}
+.dir-head p{margin:2px 0 0;color:var(--muted);font-size:.85rem}
+
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:3.1rem;padding:2px 8px;border-radius:6px;background:var(--c);color:var(--chip-ink);font-weight:600;font-size:.82rem;line-height:1.5;font-variant-numeric:tabular-nums}
+
+.hero{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:4px 14px;padding:14px 16px;border-radius:10px;background:var(--c);color:var(--chip-ink)}
+.hero .lab{grid-column:1/-1;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;opacity:.9}
+.hero .time{font-family:var(--font-display);font-weight:600;font-size:clamp(2.5rem,12vw,3.5rem);line-height:1;font-variant-numeric:tabular-nums}
+.hero .when{justify-self:end;text-align:right;font-weight:600;font-size:1.05rem}
+.hero .meta{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:8px;font-size:.88rem}
+.hero .chip{background:var(--chip-ink);color:var(--c)}
+.hero.none{background:var(--bg);color:var(--ink);border:1px dashed var(--line)}
+.hero.none .chip{background:var(--c);color:var(--chip-ink)}
+.hero.none .when{grid-column:1/-1;justify-self:start;text-align:left;font-size:1.2rem}
+
+.strip{position:relative;padding:1.3rem 0 1.5rem 3.4rem}
+.lane{position:relative;z-index:1;height:16px;margin-bottom:6px}
+.lane:last-child{margin-bottom:0}
+.lane .ln{position:absolute;left:-3.4rem;top:-2px;width:3rem;min-width:0;padding:0 4px;font-size:.72rem}
+.lane .tr{position:absolute;inset:0}
+.lane .tr::before{content:'';position:absolute;left:0;right:0;top:50%;height:2px;background:var(--line);transform:translateY(-50%)}
+.dot{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--c);transform:translate(-50%,-50%)}
+.dot.past{opacity:.28}
+.dot.next{outline:2px solid var(--ink);outline-offset:2px}
+.plot{position:absolute;left:3.4rem;right:0;top:1.3rem;bottom:1.5rem;pointer-events:none}
+.plot.over{z-index:2}
+.gl{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.now{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink);border-radius:1px}
+.now::before{content:'сейчас';position:absolute;top:-1rem;left:50%;transform:translateX(-50%);font-size:.66rem;letter-spacing:.04em;color:var(--ink);white-space:nowrap}
+.now.late::before{left:auto;right:-2px;transform:none}
+.axis{position:absolute;left:3.4rem;right:0;bottom:0;height:1.2rem}
+.axis span{position:absolute;transform:translateX(-50%);font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.sub-h{margin:0;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:3.5rem 3.4rem minmax(0,1fr);align-items:center;gap:10px;padding:9px 2px;border-top:1px solid var(--line)}
+.row:first-child{border-top-color:transparent}
+.row .t{font-weight:600;font-size:1.12rem;font-variant-numeric:tabular-nums}
+.row .chip{justify-self:start}
+.row .txt{display:flex;flex-direction:column;min-width:0}
+.row .sub{font-size:.85rem;color:var(--muted)}
+.row .when{font-size:.83rem;font-weight:600}
+.row.past{opacity:.45}
+.row.next{background:var(--hl);border-radius:8px;padding-inline:8px;border-top-color:transparent}
+.row.next + .row{border-top-color:transparent}
+
+details.day{border-top:1px solid var(--line);padding-top:4px}
+details.day summary{cursor:pointer;list-style:none;padding:8px 0;font-weight:500;font-size:.9rem;color:var(--muted)}
+details.day summary::-webkit-details-marker{display:none}
+details.day summary::before{content:'▸  '}
+details.day[open] summary::before{content:'▾  '}
+details.day summary:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+
+.routes{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.routes h2{margin:0 0 10px;font-size:1.05rem;font-weight:600}
+.routes ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.routes li{display:grid;grid-template-columns:3.6rem minmax(0,1fr);gap:10px;align-items:start;font-size:.88rem}
+.routes li .chip{justify-self:start}
+.routes .op{color:var(--muted)}
+.note{margin:14px 0 0;color:var(--muted);font-size:.82rem;max-width:70ch}
+.stamp{margin:18px 0 0;text-align:center;color:var(--muted);font-size:.85rem;font-weight:500}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Смоленская ⇄ Краснодар</h1>
+      <p>Маршруты 124, 125, 1341, 1342 · будни и выходные</p>
+    </div>
+    <div class="clock"><small>Сейчас по Краснодару</small><b id="clock">--:--</b></div>
+  </div>
+
+  <div class="cols">
+    <section class="dir" id="sec-to" aria-labelledby="h-to">
+      <div class="dir-head">
+        <h2 id="h-to">→ В Краснодар</h2>
+        <p>Время отправления из Смоленской</p>
+      </div>
+      <div class="hero" id="to-hero"></div>
+      <div class="strip" id="to-strip" aria-hidden="true"></div>
+      <p class="sub-h">Следом</p>
+      <ol class="list" id="to-soon"></ol>
+      <details class="day">
+        <summary>Все рейсы за день</summary>
+        <ol class="list" id="to-all"></ol>
+      </details>
+    </section>
+
+    <section class="dir" id="sec-from" aria-labelledby="h-from">
+      <div class="dir-head">
+        <h2 id="h-from">← Из Краснодара</h2>
+        <p>Время отправления из Краснодара, обратно в Смоленскую</p>
+      </div>
+      <div class="hero" id="from-hero"></div>
+      <div class="strip" id="from-strip" aria-hidden="true"></div>
+      <p class="sub-h">Следом</p>
+      <ol class="list" id="from-soon"></ol>
+      <details class="day">
+        <summary>Все рейсы за день</summary>
+        <ol class="list" id="from-all"></ol>
+      </details>
+    </section>
+  </div>
+
+  <section class="routes">
+    <h2>Маршруты</h2>
+    <ul>
+      <li><span class="chip" style="--c:var(--r124)">124</span><span>ст. Смоленская — Краснодар<br><span class="op">ООО «ННН-Теплый дом»</span></span></li>
+      <li><span class="chip" style="--c:var(--r125)">125</span><span>Ставропольская — Смоленская — Краснодар (Южный АВ)<br><span class="op">ООО «Экспресс», ст-ца Северская</span></span></li>
+      <li><span class="chip" style="--c:var(--r1341)">1341</span><span>ст. Крепостная — Краснодар, через Смоленскую<br><span class="op">ООО «ННН-Теплый дом»</span></span></li>
+      <li><span class="chip" style="--c:var(--r1342)">1342</span><span>ст. Ставропольская — Краснодар, через Смоленскую<br><span class="op">ООО «ННН-Теплый дом»</span></span></li>
+    </ul>
+    <p class="note">Данные взяты с фото расписаний. В них указано только время отправления, время прибытия не указано. У маршрута 125 посадка в Смоленской на конечной. Маршрут 123 (Крепостная — Северская) в Краснодар не идёт, поэтому его здесь нет.</p>
+  </section>
+
+  <p class="stamp">Актуально на 15.10.2026</p>
+</div>
+
+<script>
+(function () {
+  var ROUTE_ORDER = ['124', '125', '1341', '1342'];
+
+  // Время отправления по маршрутам. to: из Смоленской в Краснодар, from: из Краснодара.
+  var SCHEDULE = {
+    '124':  { to: ['5:20', '7:40', '11:40', '15:20'], from: ['6:25', '9:50', '13:30', '17:40'] },
+    '125':  { to: ['5:50', '9:10', '16:20'],          from: ['7:00', '13:55', '18:15'] },
+    '1341': { to: ['6:30', '10:20', '14:40', '18:20'], from: ['8:25', '12:30', '16:30', '19:40'] },
+    '1342': { to: ['5:40', '9:00', '13:00', '17:10'],  from: ['7:10', '11:10', '15:00', '18:40'] }
+  };
+
+  var SUB = {
+    to: {
+      '124': 'из Смоленской',
+      '125': 'из Ставропольской · посадка на конечной',
+      '1341': 'из Крепостной · проездом',
+      '1342': 'из Ставропольской · проездом'
+    },
+    from: {
+      '124': 'до Смоленской',
+      '125': 'с Южного АВ',
+      '1341': 'до Крепостной, через Смоленскую',
+      '1342': 'до Ставропольской, через Смоленскую'
+    }
+  };
+
+  var START = 300, SPAN = 900; // шкала дня: 5:00 – 20:00
+  var HOURS = [6, 9, 12, 15, 18];
+
+  function toMin(s) { var p = s.split(':'); return +p[0] * 60 + +p[1]; }
+  function fmt(min) { return Math.floor(min / 60) + ':' + String(min % 60).padStart(2, '0'); }
+  function pad2(n) { return String(n).padStart(2, '0'); }
+
+  function build(dir) {
+    var arr = [];
+    ROUTE_ORDER.forEach(function (r) {
+      SCHEDULE[r][dir].forEach(function (t) { arr.push({ r: r, t: toMin(t) }); });
+    });
+    arr.sort(function (a, b) { return a.t - b.t || ROUTE_ORDER.indexOf(a.r) - ROUTE_ORDER.indexOf(b.r); });
+    return arr;
+  }
+  var DATA = { to: build('to'), from: build('from') };
+
+  // Текущее время в Краснодаре (МСК, UTC+3) независимо от часового пояса телефона.
+  function nowMsk() {
+    try {
+      var parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+      var h = 0, m = 0;
+      parts.forEach(function (p) { if (p.type === 'hour') h = +p.value; if (p.type === 'minute') m = +p.value; });
+      return h * 60 + m;
+    } catch (e) {
+      var d = new Date(Date.now() + 180 * 60000);
+      return d.getUTCHours() * 60 + d.getUTCMinutes();
+    }
+  }
+
+  function until(diff) {
+    if (diff <= 0) return 'отправляется сейчас';
+    if (diff < 60) return 'через ' + diff + ' мин';
+    var h = Math.floor(diff / 60), m = diff % 60;
+    return 'через ' + h + ' ч' + (m ? ' ' + m + ' мин' : '');
+  }
+
+  function chip(r) { return '<span class="chip" style="--c:var(--r' + r + ')">' + r + '</span>'; }
+
+  function pct(min) { return ((min - START) / SPAN * 100).toFixed(2); }
+
+  function stripHTML(dir, now, nextItem) {
+    var lanes = ROUTE_ORDER.map(function (r) {
+      var dots = DATA[dir].filter(function (x) { return x.r === r; }).map(function (x) {
+        var cls = 'dot' + (x.t < now ? ' past' : '') + (x === nextItem ? ' next' : '');
+        return '<i class="' + cls + '" style="left:' + pct(x.t) + '%"></i>';
+      }).join('');
+      return '<div class="lane" style="--c:var(--r' + r + ')"><span class="chip ln">' + r + '</span><div class="tr">' + dots + '</div></div>';
+    }).join('');
+    var grid = HOURS.map(function (h) { return '<i class="gl" style="left:' + pct(h * 60) + '%"></i>'; }).join('');
+    var axis = HOURS.map(function (h) { return '<span style="left:' + pct(h * 60) + '%">' + h + ':00</span>'; }).join('');
+    var nowEl = '';
+    if (now >= START && now <= START + SPAN) {
+      var p = pct(now);
+      nowEl = '<div class="plot over"><i class="now' + (p > 85 ? ' late' : '') + '" style="left:' + p + '%"></i></div>';
+    }
+    return '<div class="plot">' + grid + '</div>' + lanes + nowEl + '<div class="axis">' + axis + '</div>';
+  }
+
+  function rowHTML(x, dir, now, mode, nextItem) {
+    var tail = '';
+    if (mode === 'soon') tail = until(x.t - now);
+    else if (x.t < now) tail = 'ушёл';
+    else if (x === nextItem) tail = 'ближайший';
+    var cls = 'row' + (mode === 'all' && x.t < now ? ' past' : '') + (mode === 'all' && x === nextItem ? ' next' : '');
+    return '<li class="' + cls + '" style="--c:var(--r' + x.r + ')">' +
+      '<span class="t">' + fmt(x.t) + '</span>' + chip(x.r) +
+      '<span class="txt"><span class="sub">' + SUB[dir][x.r] + '</span>' +
+      (tail ? '<span class="when">' + tail + '</span>' : '') + '</span></li>';
+  }
+
+  function heroHTML(dir, now, list, idx) {
+    if (idx < 0) {
+      var first = list[0];
+      return '<div class="lab">На сегодня всё</div>' +
+        '<div class="when">Рейсов больше нет</div>' +
+        '<div class="meta" style="--c:var(--r' + first.r + ')">Завтра первый в ' + fmt(first.t) + ' ' + chip(first.r) + '</div>';
+    }
+    var x = list[idx];
+    return '<div class="lab">Ближайший рейс</div>' +
+      '<div class="time">' + fmt(x.t) + '</div>' +
+      '<div class="when">' + until(x.t - now) + '</div>' +
+      '<div class="meta">' + chip(x.r) + '<span>' + SUB[dir][x.r] + '</span></div>';
+  }
+
+  function renderDir(dir, now) {
+    var list = DATA[dir];
+    var idx = -1;
+    for (var i = 0; i < list.length; i++) { if (list[i].t >= now) { idx = i; break; } }
+    var nextItem = idx >= 0 ? list[idx] : null;
+
+    var hero = document.getElementById(dir + '-hero');
+    hero.className = 'hero' + (idx < 0 ? ' none' : '');
+    if (idx >= 0) hero.style.setProperty('--c', 'var(--r' + list[idx].r + ')');
+    else hero.style.removeProperty('--c');
+    hero.innerHTML = heroHTML(dir, now, list, idx);
+
+    document.getElementById(dir + '-strip').innerHTML = stripHTML(dir, now, nextItem);
+
+    var soon = idx >= 0 ? list.slice(idx + 1, idx + 5) : [];
+    var soonEl = document.getElementById(dir + '-soon');
+    soonEl.innerHTML = soon.map(function (x) { return rowHTML(x, dir, now, 'soon', nextItem); }).join('');
+    soonEl.previousElementSibling.hidden = soon.length === 0;
+
+    document.getElementById(dir + '-all').innerHTML = list.map(function (x) { return rowHTML(x, dir, now, 'all', nextItem); }).join('');
+  }
+
+  function render() {
+    var now = nowMsk();
+    document.getElementById('clock').textContent = pad2(Math.floor(now / 60)) + ':' + pad2(now % 60);
+    renderDir('to', now);
+    renderDir('from', now);
+  }
+
+  render();
+  setInterval(render, 15000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) render(); });
+})();
+</script>
+
+</body></html>
